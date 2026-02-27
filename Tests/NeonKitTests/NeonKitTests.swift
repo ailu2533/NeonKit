@@ -1,9 +1,11 @@
 import Foundation
+import XCTest
 @testable import NeonKit
-import Testing
 
-@Test func clientInitialization() throws {
-    let config = WebDAVClientConfiguration(baseURL: URL(string: "http://localhost")!)
-    _ = try WebDAVClient(configuration: config)
-    #expect(Bool(true))
+final class NeonKitTests: XCTestCase {
+    func testClientInitialization() throws {
+        let config = WebDAVClientConfiguration(baseURL: URL(string: "http://localhost")!)
+        _ = try WebDAVClient(configuration: config)
+        XCTAssertTrue(true)
+    }
 }

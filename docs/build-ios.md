@@ -17,6 +17,9 @@ Consumers should use committed `Artifacts/NeonNative.xcframework` directly.
 - `EXPAT_IOS_SIM_X86_64_ROOT`: optional expat override prefix for simulator `x86_64`
 - `IOS_MIN_VERSION`: deployment target (default `16.0`)
 
+## Prerequisites
+- Homebrew `autoconf`, `automake`, `libtool` (needed when `configure` is generated via `autogen.sh`)
+
 ## Build command (static libs for current SDK)
 ```bash
 IOS_SDK=iphonesimulator \

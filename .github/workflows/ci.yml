@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install openssl@3 coreutils
+          brew install openssl@3 coreutils autoconf automake libtool
 
       - name: Fetch iOS OpenSSL prebuilts
         run: git clone --depth 1 https://github.com/krzyzanowskim/OpenSSL.git "$RUNNER_TEMP/OpenSSL"

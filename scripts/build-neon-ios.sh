@@ -7,6 +7,24 @@ IOS_BUILD_ROOT="$ROOT_DIR/.build/neon/ios"
 IOS_MIN_VERSION="${IOS_MIN_VERSION:-16.0}"
 IOS_SDK="${IOS_SDK:-iphonesimulator}"
 
+ensure_autotools() {
+  local missing=()
+
+  command -v autoconf >/dev/null 2>&1 || missing+=("autoconf")
+  command -v aclocal >/dev/null 2>&1 || missing+=("automake (aclocal)")
+  command -v autoheader >/dev/null 2>&1 || missing+=("autoheader")
+  if ! command -v libtoolize >/dev/null 2>&1 && ! command -v glibtoolize >/dev/null 2>&1; then
+    missing+=("libtool (libtoolize/glibtoolize)")
+  fi
+
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "missing autotools for generating configure:" >&2
+    printf '  - %s\n' "${missing[@]}" >&2
+    echo "install with: brew install autoconf automake libtool" >&2
+    exit 1
+  fi
+}
+
 # Required:
 # - OPENSSL_IOS_ROOT: prefix containing include/ + lib/ for selected IOS_SDK
 #
@@ -25,6 +43,7 @@ if [[ ! -d "$NEON_SRC_DIR" ]]; then
 fi
 
 if [[ ! -x "$NEON_SRC_DIR/configure" ]]; then
+  ensure_autotools
   echo "configure script not found, generating with autogen.sh"
   (cd "$NEON_SRC_DIR" && ./autogen.sh)
 fi

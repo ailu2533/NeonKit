@@ -7,6 +7,7 @@ Consumers should use committed `Artifacts/NeonNative.xcframework` directly.
 - Xcode command line tools
 - Homebrew `openssl@3`
 - Homebrew `coreutils` (for GNU `date` compatibility in `neon` test scripts)
+- Homebrew `autoconf`, `automake`, `libtool` (needed when `configure` is generated via `autogen.sh`)
 
 ## Build
 ```bash

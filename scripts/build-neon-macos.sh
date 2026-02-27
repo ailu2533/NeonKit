@@ -7,12 +7,31 @@ BUILD_DIR="$ROOT_DIR/.build/neon/macos-build"
 PREFIX_DIR="$ROOT_DIR/.build/neon/macos"
 MACOS_MIN_VERSION="${MACOS_MIN_VERSION:-13.0}"
 
+ensure_autotools() {
+  local missing=()
+
+  command -v autoconf >/dev/null 2>&1 || missing+=("autoconf")
+  command -v aclocal >/dev/null 2>&1 || missing+=("automake (aclocal)")
+  command -v autoheader >/dev/null 2>&1 || missing+=("autoheader")
+  if ! command -v libtoolize >/dev/null 2>&1 && ! command -v glibtoolize >/dev/null 2>&1; then
+    missing+=("libtool (libtoolize/glibtoolize)")
+  fi
+
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "missing autotools for generating configure:" >&2
+    printf '  - %s\n' "${missing[@]}" >&2
+    echo "install with: brew install autoconf automake libtool" >&2
+    exit 1
+  fi
+}
+
 if [[ ! -d "$NEON_SRC_DIR" ]]; then
   echo "missing submodule at $NEON_SRC_DIR" >&2
   exit 1
 fi
 
 if [[ ! -x "$NEON_SRC_DIR/configure" ]]; then
+  ensure_autotools
   echo "configure script not found, generating with autogen.sh"
   (cd "$NEON_SRC_DIR" && ./autogen.sh)
 fi

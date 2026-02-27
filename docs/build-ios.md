@@ -2,7 +2,8 @@
 
 `neon` is built externally (submodule source remains untouched).
 
-If you want Git URL consumers to use the package without local build scripts, build and commit `Artifacts/NeonNative.xcframework` via `docs/build-xcframework.md`.
+This document is for maintainers rebuilding native artifacts.
+Consumers should use committed `Artifacts/NeonNative.xcframework` directly.
 
 ## Required env vars
 - `OPENSSL_IOS_ROOT`: prefix containing `include/` and `lib/` for selected `IOS_SDK`
@@ -53,8 +54,7 @@ Output:
 - `.build/neon/ios/lib/libcrypto.a`
 - `.build/neon/ios/include/ne_*.h`
 
-## SwiftPM integration
-- `Package.swift` links iOS builds from `.build/neon/ios/lib`.
-- Build the matching SDK slice before building that destination with SwiftPM/Xcode.
+## Usage in packaging
+- These outputs are intermediate artifacts used by `scripts/build-neon-xcframework.sh`.
 - By default expat resolves from iOS SDK system library: `libexpat.tbd`.
 - Only set `EXPAT_IOS_ROOT` when you need to force a custom expat build.

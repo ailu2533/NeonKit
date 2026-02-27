@@ -3,10 +3,20 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
-  macos:
+  consumer-binary:
     runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Swift tests (consumer mode)
+        run: swift test
+
+  maintainer-rebuild:
+    runs-on: macos-14
+    needs: consumer-binary
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,14 +27,25 @@ jobs:
           brew update
           brew install openssl@3 coreutils
 
+      - name: Fetch iOS OpenSSL prebuilts
+        run: git clone --depth 1 https://github.com/krzyzanowskim/OpenSSL.git "$RUNNER_TEMP/OpenSSL"
+
       - name: Check neon submodule cleanliness
         run: ./scripts/check-neon-submodule-clean.sh
 
-      - name: Build neon
-        run: ./scripts/build-neon-macos.sh
-
       - name: Run upstream neon tests
-        run: ./scripts/test-neon-native.sh
+        run: |
+          ./scripts/build-neon-macos.sh
+          ./scripts/test-neon-native.sh
 
-      - name: Swift tests
+      - name: Build Neon XCFramework
+        env:
+          OPENSSL_IOS_DEVICE_ROOT: ${{ runner.temp }}/OpenSSL/iphoneos
+          OPENSSL_IOS_SIM_ROOT: ${{ runner.temp }}/OpenSSL/iphonesimulator
+        run: ./scripts/build-neon-xcframework.sh
+
+      - name: Verify XCFramework is up to date
+        run: git diff --exit-code -- Artifacts/NeonNative.xcframework
+
+      - name: Swift tests (maintainer mode)
         run: swift test

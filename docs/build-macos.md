@@ -1,5 +1,8 @@
 # Build Neon on macOS
 
+This document is for maintainers rebuilding native artifacts.
+Consumers should use committed `Artifacts/NeonNative.xcframework` directly.
+
 ## Prerequisites
 - Xcode command line tools
 - Homebrew `openssl@3`

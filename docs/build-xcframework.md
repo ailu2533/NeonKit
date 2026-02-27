@@ -35,6 +35,10 @@ swift build
 swift test
 ```
 
+Note:
+- The generated `.a` archives are not byte-for-byte deterministic across rebuilds on Apple toolchains.
+- CI validates XCFramework layout/architectures via `scripts/verify-neon-xcframework.sh` instead of `git diff` on binaries.
+
 ## Publish for Git URL usage
 1. Build `Artifacts/NeonNative.xcframework`.
 2. Commit and push it with your package source.

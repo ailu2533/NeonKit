@@ -44,8 +44,8 @@ jobs:
           OPENSSL_IOS_SIM_ROOT: ${{ runner.temp }}/OpenSSL/iphonesimulator
         run: ./scripts/build-neon-xcframework.sh
 
-      - name: Verify XCFramework is up to date
-        run: git diff --exit-code -- Artifacts/NeonNative.xcframework
+      - name: Verify XCFramework layout
+        run: ./scripts/verify-neon-xcframework.sh
 
       - name: Swift tests (maintainer mode)
         run: swift test

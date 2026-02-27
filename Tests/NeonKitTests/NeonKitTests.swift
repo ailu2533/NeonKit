@@ -1,6 +1,9 @@
-import Testing
+import Foundation
 @testable import NeonKit
+import Testing
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@Test func clientInitialization() throws {
+    let config = WebDAVClientConfiguration(baseURL: URL(string: "http://localhost")!)
+    _ = try WebDAVClient(configuration: config)
+    #expect(Bool(true))
 }

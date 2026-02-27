@@ -1,0 +1,4 @@
+module CNeon [system] {
+    header "include/CNeon.h"
+    export *
+}

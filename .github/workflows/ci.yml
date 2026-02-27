@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install openssl@3 coreutils
+
+      - name: Check neon submodule cleanliness
+        run: ./scripts/check-neon-submodule-clean.sh
+
+      - name: Build neon
+        run: ./scripts/build-neon-macos.sh
+
+      - name: Run upstream neon tests
+        run: ./scripts/test-neon-native.sh
+
+      - name: Swift tests
+        run: swift test

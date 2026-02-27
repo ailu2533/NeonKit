@@ -1,0 +1,4 @@
+module NeonNative {
+    header "NeonNative.h"
+    export *
+}
